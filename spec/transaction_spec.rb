@@ -22,4 +22,11 @@ describe "RealEx::Transaction" do
   it "should set up the card" do
     @transaction.card.should == @card
   end
+  
+  it "should allow setting comments" do
+    @transaction.comments << "This is a comment"
+    @transaction.comments.should == ["This is a comment"]
+  end
+  
+  
 end
