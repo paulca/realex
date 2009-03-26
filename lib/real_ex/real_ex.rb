@@ -87,43 +87,7 @@ class RealEx
       new_card
       return [authorisation_code, pasref]
     end
-  
-    def authorise(billing_address, shipping_address)
-      response = xml_request('/epage-remote.cgi', 'auth') do |r|
-        r.merchantid @merchant_id
-        r.orderid @order_ref
-        r.account @account
-        r.amount(@amount, :currency => @currency)
-        r.card do |c|
-          c.number @card.number
-          c.expdate @card.expiry_date
-          c.chname @card.clean_name
-          c.type @card.card_type
-        end
-        r.autosettle :flag => @autosettle
-        r.tssinfo do |t|
-          t.custnum billing_address.id
-          t.varref billing_address.id
-          t.address :type => 'billing' do |a|
-            a.code billing_address.postcode
-            a.country billing_address.country.country
-          end
-          t.address :type => 'shipping' do |a|
-            a.code shipping_address.postcode
-            a.country shipping_address.country.country
-          end
-        end
-        r.sha1hash build_hash([@timestamp, @merchant_id, @order_ref, @amount, @currency, @card.number])
-      end
-      case (response/:result).inner_html
-        when '00' then return [(response/:authcode).inner_html, (response/:pasref).inner_html]
-        when '101', '102', '103' then raise RealExError, "We are having difficulties processing your credit card."
-        when '205' then raise RealExError, "There was an error connecting to the bank.  Please try again."
-        when '501' then raise RealExError, "The transaction has already been processed."
-        else raise RealExError, (response/:message).inner_html
-      end
-    end
-  
+    
     def new_payer(firstname, surname)
       response = xml_request('/epage-remote-plugins.cgi', 'payer-new') do |r|
         r.merchantid @merchant_id
