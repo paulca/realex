@@ -5,6 +5,7 @@ require 'net/https'
  
 $:.unshift(File.dirname(__FILE__))
 require 'real_ex/initializer'
+require 'real_ex/config'
 require 'real_ex/card'
 require 'real_ex/transaction'
  

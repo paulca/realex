@@ -8,5 +8,9 @@ module RealEx
       super(hash)
       self.comments ||= []
     end
+    
+    def to_xml
+      
+    end
   end
 end
