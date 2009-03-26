@@ -19,5 +19,9 @@ module RealEx
       }.inject(0) { |sum,number| sum + number }
       luhn % 10 == 0
     end
+    
+    def clean_name
+      cardholder_name.gsub(/[^a-zA-Z0-9 ]/, '')
+    end
   end
 end
