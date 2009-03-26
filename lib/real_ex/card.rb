@@ -1,10 +1,12 @@
 module RealEx
   class Card
-    attr_accessor :number, :cvv, :expiry_date, :cardholder_name, :type, :issue_number
+    include Initializer
     
-    def initialize(attributes = {})
-      attributes.each { |k, v| send("#{k}=", v) } unless attributes.nil?
-    end
+    attributes :number, :cvv, :expiry_date, :cardholder_name, :type, :issue_number
+    
+    # def initialize(attributes = {})
+    #   attributes.each { |k, v| send("#{k}=", v) } unless attributes.nil?
+    # end
     
     # The luhn check is a check to see if a credit card
     # is actually a credit card or not
