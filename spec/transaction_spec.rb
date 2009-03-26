@@ -2,6 +2,10 @@ require File.dirname(__FILE__) + '/spec_helper.rb'
 
 describe "RealEx::Transaction" do
   before do
+    RealEx::Config.merchant_id = 'paul'
+    RealEx::Config.shared_secret = "She's a man!"
+    RealEx::Config.account = 'internet'
+
     @card = RealEx::Card.new(
               :number           => '4111111111111111',
               :cvv              => '509',
@@ -17,6 +21,7 @@ describe "RealEx::Transaction" do
                     :currency     => 'EUR',
                     :autosettle   => true
                     )
+    RealEx::Client.stub!(:timestamp).and_return('20090326160218')
   end
   
   it "should set up the card" do
@@ -29,7 +34,18 @@ describe "RealEx::Transaction" do
   end
   
   it "should build the xml" do
-    @transaction.to_xml.should == ""
+    @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"auth\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <card>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <autosettle flag=\"1\"/>\n  <tssinfo>\n  </tssinfo>\n  <sha1hash>d979885b0a296469d85ada0f08c5577d857142a0</sha1hash>\n</request>\n"
+  end
+  
+  describe "with addresses" do
+    before do
+      @transaction.shipping_address = RealEx::Address.new(:post_code => 'Shipping Code', :country => 'Shipping Country')
+      @transaction.billing_address = RealEx::Address.new(:post_code => 'Biling Code', :country => 'Billing Country')
+    end
+    
+    it "should add the addresses into the xml" do
+      @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"auth\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <card>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <autosettle flag=\"1\"/>\n  <tssinfo>\n    <address type=\"billing\">\n      <code>Biling Code</code>\n      <country>Billing Country</country>\n    </address>\n    <address type=\"shipping\">\n      <code>Shipping Code</code>\n      <country>Shipping Country</country>\n    </address>\n  </tssinfo>\n  <sha1hash>d979885b0a296469d85ada0f08c5577d857142a0</sha1hash>\n</request>\n"
+    end
   end
   
 end

@@ -1,7 +1,7 @@
 module RealEx
   class Transaction
     include Initializer
-    attributes :card, :amount, :order_id, :currency, :autosettle, :shipping_address, :billing_address
+    attributes :card, :amount, :order_id, :currency, :autosettle, :shipping_address, :billing_address, :customer_number, :variable_reference, :product_id, :customer_ip_address
     attr_accessor :comments
     
     def initialize(hash)
@@ -15,7 +15,7 @@ module RealEx
     end
     
     def to_xml
-      RealEx::Client.build_xml('auth') do |r|
+      xml = RealEx::Client.build_xml('auth') do |r|
         r.merchantid RealEx::Config.merchant_id
         r.orderid order_id
         r.account RealEx::Config.account
@@ -28,19 +28,29 @@ module RealEx
         end
         r.autosettle :flag => autosettle? ? '1' : '0'
         r.tssinfo do |t|
-          t.custnum billing_address.id
-          t.varref billing_address.id
-          t.address :type => 'billing' do |a|
-            a.code billing_address.postcode
-            a.country billing_address.country.country
+          t.custnum customer_number if customer_number
+          t.varref variable_reference if variable_reference
+          t.prodid product_id if product_id
+          t.custipaddress customer_ip_address if customer_ip_address
+          if billing_address
+            t.address :type => 'billing' do |a|
+              a.code billing_address.post_code
+              a.country billing_address.country
+            end
           end
-          t.address :type => 'shipping' do |a|
-            a.code shipping_address.postcode
-            a.country shipping_address.country.country
+          if shipping_address
+            t.address :type => 'shipping' do |a|
+              a.code shipping_address.post_code
+              a.country shipping_address.country
+            end
           end
         end
-        r.sha1hash build_hash([@timestamp, @merchant_id, @order_ref, @amount, @currency, @card.number])
+        r.sha1hash hash
       end
+    end
+    
+    def hash
+      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, card.number])
     end
 
     def authorise(billing_address, shipping_address)

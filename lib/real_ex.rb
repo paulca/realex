@@ -9,6 +9,7 @@ require 'real_ex/initializer'
 require 'real_ex/config'
 require 'real_ex/client'
 
+require 'real_ex/address'
 require 'real_ex/card'
 require 'real_ex/transaction'
  
