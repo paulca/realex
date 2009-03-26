@@ -28,5 +28,8 @@ describe "RealEx::Transaction" do
     @transaction.comments.should == ["This is a comment"]
   end
   
+  it "should build the xml" do
+    @transaction.to_xml.should == ""
+  end
   
 end
