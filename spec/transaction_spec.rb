@@ -48,4 +48,12 @@ describe "RealEx::Transaction" do
     end
   end
   
+  describe "actually going through" do
+    
+    it "should parse the response" do
+      RealEx::Client.should_receive(:call).and_return(Hpricot.XML('yay'))
+      @transaction.authorize
+    end
+  end
+  
 end

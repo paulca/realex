@@ -53,16 +53,8 @@ module RealEx
       RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, card.number])
     end
 
-    def authorise(billing_address, shipping_address)
-      response = xml_request('/epage-remote.cgi', 'auth') do |r|
-      end
-      case (response/:result).inner_html
-        when '00' then return [(response/:authcode).inner_html, (response/:pasref).inner_html]
-        when '101', '102', '103' then raise RealExError, "We are having difficulties processing your credit card."
-        when '205' then raise RealExError, "There was an error connecting to the bank.  Please try again."
-        when '501' then raise RealExError, "The transaction has already been processed."
-        else raise RealExError, (response/:message).inner_html
-      end
+    def authorize
+      RealEx::Response.new_from_xml(RealEx::Client.call('/epage-remote.cgi', to_xml))
     end
 
   end
