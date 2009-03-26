@@ -12,9 +12,10 @@ require 'real_ex/client'
 require 'real_ex/address'
 require 'real_ex/card'
 require 'real_ex/transaction'
+require 'real_ex/response'
  
 module RealEx
-  class Unavailable < StandardError; end
+  class UnknownError < StandardError; end
   class CantConnect < StandardError; end
   class BadResponse < StandardError; end
   class UnknownTimeline < ArgumentError; end
