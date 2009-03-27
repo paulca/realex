@@ -93,7 +93,31 @@ module RealEx
     def authorize!
       RealEx::Response.new_from_xml(RealEx::Client.call('/epage-remote.cgi', to_xml))
     end
+    
+    def rebate!
+      
+    end
+    
+    def void!
+      
+    end
+    
+    def settle!
+      
+    end
 
+  end
+  
+  class Authorization < Transaction
+    
+  end
+  
+  class Settlement < Transaction
+    
+  end
+  
+  class Score < Transaction
+    
   end
   
   class Rebate < Transaction
