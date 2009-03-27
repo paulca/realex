@@ -91,3 +91,23 @@ describe "RealEx::Transaction" do
   end
   
 end
+
+describe "RealEx::Rebate" do
+  before do
+    RealEx::Config.merchant_id = 'paul'
+    RealEx::Config.shared_secret = "She's a man!"
+    RealEx::Config.account = 'internet'
+    RealEx::Config.refund_password = ''
+    @rebate = RealEx::Rebate.new(
+              :order_id           => '12345',
+              :pasref              => '23455',
+              :authcode      => '123123123',
+              :amount  => 500
+              )
+    RealEx::Client.stub!(:timestamp).and_return('20090326160218')
+  end
+  
+  it "should create some tasty xml" do
+    @rebate.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"auth\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>12345</orderid>\n  <authcode>123123123</authcode>\n  <pasref>23455</pasref>\n  <account>internet</account>\n  <amount currency=\"\">500</amount>\n  <autosettle flag=\"0\"/>\n  <refundhash>da39a3ee5e6b4b0d3255bfef95601890afd80709</refundhash>\n  <sha1hash>b59293aa340136d298d2534a7b6dfc1abb0036a5</sha1hash>\n</request>\n"
+  end
+end
