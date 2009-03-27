@@ -10,9 +10,10 @@ module RealEx
     def initialize(hash)
       super(hash)
       self.comments ||= []
-      self.autosettle ||= false
+      self.autosettle ||= true
       self.manual ||= false
       self.offline ||= false
+      self.currency ||= RealEx::Config.currency || 'EUR'
     end
     
     def autosettle?
@@ -106,10 +107,10 @@ module RealEx
     def to_xml(&block)
       xml = RealEx::Client.build_xml(request_type) do |r|
         r.merchantid RealEx::Config.merchant_id
+        r.account RealEx::Config.account
         r.orderid order_id
         r.authcode authcode if authcode
-        r.pasref pasref if pasref
-        r.account RealEx::Config.account
+        r.pasref pasref if pasref        
         r.amount(amount, :currency => currency)
         r.autosettle :flag => autosettle? ? '1' : '0'
         r.refundhash refund_hash
