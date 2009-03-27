@@ -13,7 +13,7 @@ module RealEx
     end
     
     def request_type
-      class.name.split('::').last.downcase
+      self.class.name.split('::').last.downcase
     end
     
     def autosettle?
@@ -146,10 +146,6 @@ module RealEx
     
     def refund_hash
       Digest::SHA1.hexdigest((refund_password || RealEx::Config.refund_password || ''))
-    end
-    
-    def request_type
-      'rebate'
     end
     
     def to_xml(&block)
