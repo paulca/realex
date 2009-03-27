@@ -1,7 +1,7 @@
 module RealEx
   class Transaction
     include Initializer
-    attributes :card, :amount, :order_id, :currency, :autosettle, :shipping_address, :billing_address, :customer_number, :variable_reference, :product_id, :customer_ip_address
+    attributes :card, :amount, :order_id, :currency, :autosettle, :variable_reference
     attr_accessor :comments
     attr_accessor :authcode, :pasref
     
@@ -48,9 +48,10 @@ module RealEx
   end
   
   class Authorization < Transaction
-    attr_accessor :offline, :manual
+    attributes :shipping_address, :billing_address, :customer_number, :product_id, :customer_ip_address
+    attributes :offline, :manual
     
-    REQUEST_TYPES = ['auth', 'manual', 'offline']
+    REQUEST_TYPES = ['auth', 'manual', 'offline', 'realscore']
     
     def initialize(hash = {})
       super(hash)
