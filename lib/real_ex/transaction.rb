@@ -12,6 +12,10 @@ module RealEx
       self.currency ||= RealEx::Config.currency || 'EUR'
     end
     
+    def request_type
+      class.name.split('::').last.downcase
+    end
+    
     def autosettle?
       autosettle
     end
@@ -130,30 +134,10 @@ module RealEx
     
   end
   
-  class Void < Transaction
-    
-    def request_type
-      'void'
-    end
-    
-    def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', ''])
-    end
+  class Void < Transaction    
   end
   
   class Settle < Transaction
-    
-    def request_type
-      'settle'
-    end
-    
-    def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', ''])
-    end
-  end
-  
-  class Score < Transaction
-    
   end
   
   class Rebate < Transaction
