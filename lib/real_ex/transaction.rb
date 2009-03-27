@@ -44,18 +44,6 @@ module RealEx
     def authorize!
       RealEx::Response.new_from_xml(RealEx::Client.call('/epage-remote.cgi', to_xml))
     end
-    
-    def rebate!
-      
-    end
-    
-    def void!
-      
-    end
-    
-    def settle!
-      
-    end
 
   end
   
@@ -123,10 +111,57 @@ module RealEx
       end
     end
     
+    def rebate!
+      
+    end
+    
+    def void!
+      
+    end
+    
+    def settle!
+      
+    end
+    
+  end
+  
+  class Void < Transaction
+    
+    def request_type
+      'void'
+    end
+    
+    def hash
+      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', ''])
+    end
   end
   
   class Settlement < Transaction
     
+    def request_type
+      'settle'
+    end
+    
+    def to_xml(&block)
+      super do |per|
+        per.amount(amount, :currency => currency)
+        per.autosettle :flag => autosettle? ? '1' : '0'
+        per.refundhash refund_hash
+        if !comments.empty?
+          per.comments do |c|
+            comments.each_with_index do |index,comment|
+              c.comment(comment, :id => index)
+            end
+          end
+        end
+        per.sha1hash hash
+      end
+    end
+
+    
+    def hash
+      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, ''])
+    end
   end
   
   class Score < Transaction
@@ -146,23 +181,17 @@ module RealEx
     end
     
     def to_xml(&block)
-      xml = RealEx::Client.build_xml(request_type) do |r|
-        r.merchantid RealEx::Config.merchant_id
-        r.account RealEx::Config.account
-        r.orderid order_id
-        r.authcode authcode if authcode
-        r.pasref pasref if pasref        
-        r.amount(amount, :currency => currency)
-        r.autosettle :flag => autosettle? ? '1' : '0'
-        r.refundhash refund_hash
+      super do |per|
+        per.amount(amount, :currency => currency)
+        per.autosettle :flag => autosettle? ? '1' : '0'
+        per.refundhash refund_hash
         if !comments.empty?
-          r.comments do |c|
+          per.comments do |c|
             comments.each_with_index do |index,comment|
               c.comment(comment, :id => index)
             end
           end
         end
-        r.sha1hash hash
       end
     end
 

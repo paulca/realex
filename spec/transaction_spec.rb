@@ -108,6 +108,25 @@ describe "RealEx::Rebate" do
   end
   
   it "should create some tasty xml" do
-    @rebate.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"rebate\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <account>internet</account>\n  <orderid>12345</orderid>\n  <authcode>123123123</authcode>\n  <pasref>23455</pasref>\n  <amount currency=\"EUR\">500</amount>\n  <autosettle flag=\"1\"/>\n  <refundhash>da39a3ee5e6b4b0d3255bfef95601890afd80709</refundhash>\n  <sha1hash>be2f8fdc84c32d8d77ab6fae7896c10530d9d80c</sha1hash>\n</request>\n"
+    @rebate.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"rebate\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>12345</orderid>\n  <authcode>123123123</authcode>\n  <pasref>23455</pasref>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <autosettle flag=\"1\"/>\n  <refundhash>da39a3ee5e6b4b0d3255bfef95601890afd80709</refundhash>\n  <sha1hash>be2f8fdc84c32d8d77ab6fae7896c10530d9d80c</sha1hash>\n</request>\n"
+  end
+end
+
+describe "RealEx::Void" do
+  before do
+    RealEx::Config.merchant_id = 'paul'
+    RealEx::Config.shared_secret = "She's a man!"
+    RealEx::Config.account = 'internet'
+    RealEx::Config.refund_password = ''
+    @void = RealEx::Void.new(
+              :order_id           => '12345',
+              :pasref              => '23455',
+              :authcode      => '123123123'
+              )
+    RealEx::Client.stub!(:timestamp).and_return('20090326160218')
+  end
+  
+  it "should create some tasty xml" do
+    @void.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"void\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>12345</orderid>\n  <authcode>123123123</authcode>\n  <pasref>23455</pasref>\n  <account>internet</account>\n  <sha1hash>16b04c4e989c413a54da8585266f6087cedccb0b</sha1hash>\n</request>\n"
   end
 end

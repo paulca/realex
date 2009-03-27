@@ -7,7 +7,7 @@ RealEx::Config.merchant_id = 'YOUR MERCHANT ID'
 
 card = RealEx::Card.new(:number => '4263971921001307', :cvv => '509', :expiry_date => '0822', :cardholder_name => 'Paul Campbell', :type => 'VISA')
 
-transaction = RealEx::Transaction.new(
+transaction = RealEx::Authorization.new(
 :customer_number => 1234, :variable_reference => 1234,
 :card => card, :amount => 500, :order_id => 12345, :currency => 'EUR', :autosettle => true)
 
