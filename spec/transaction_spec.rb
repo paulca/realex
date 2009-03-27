@@ -67,4 +67,27 @@ describe "RealEx::Transaction" do
     end
   end
   
+  describe "an offline request type" do
+    before do
+      @transaction.offline = true
+      @transaction.authcode = '123456'
+    end
+    
+    it "should allow an offline request" do
+      @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"offline\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <authcode>123456</authcode>\n  <account>internet</account>\n  <sha1hash>c01440492e678c7793cc7a221617384dec6d9ea1</sha1hash>\n</request>\n"
+    end
+  end
+  
+  describe "a bit of meta" do
+    it "should allow setting and getting of manual= and manual?" do
+      @transaction.manual = true
+      @transaction.manual?.should == true
+    end
+    
+    it "should allow setting and getting of offline= and offline?" do
+      @transaction.offline = true
+      @transaction.offline?.should == true
+    end
+  end
+  
 end
