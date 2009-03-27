@@ -38,7 +38,7 @@ module RealEx
     end
     
     def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, (amount unless offline?), (currency unless offline?), (card.number unless offline?)])
+      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', ''])
     end
 
     def authorize!
@@ -112,6 +112,10 @@ module RealEx
       end
     end
     
+    def hash
+      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, (amount unless offline?), (currency unless offline?), (card.number unless offline?)])
+    end
+    
     def rebate!
       
     end
@@ -137,31 +141,14 @@ module RealEx
     end
   end
   
-  class Settlement < Transaction
+  class Settle < Transaction
     
     def request_type
       'settle'
     end
     
-    def to_xml(&block)
-      super do |per|
-        per.amount(amount, :currency => currency)
-        per.autosettle :flag => autosettle? ? '1' : '0'
-        per.refundhash refund_hash
-        if !comments.empty?
-          per.comments do |c|
-            comments.each_with_index do |index,comment|
-              c.comment(comment, :id => index)
-            end
-          end
-        end
-        per.sha1hash hash
-      end
-    end
-
-    
     def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, ''])
+      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', ''])
     end
   end
   
