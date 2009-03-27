@@ -14,7 +14,7 @@ describe "RealEx::Transaction" do
               :type             => 'VISA',
               :issue_number     =>  nil
               )
-    @transaction = RealEx::Transaction.new(
+    @transaction = RealEx::Authorization.new(
                     :card         => @card,
                     :amount       => 500,
                     :order_id     => 1234,
@@ -108,6 +108,6 @@ describe "RealEx::Rebate" do
   end
   
   it "should create some tasty xml" do
-    @rebate.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"auth\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>12345</orderid>\n  <authcode>123123123</authcode>\n  <pasref>23455</pasref>\n  <account>internet</account>\n  <amount currency=\"\">500</amount>\n  <autosettle flag=\"0\"/>\n  <refundhash>da39a3ee5e6b4b0d3255bfef95601890afd80709</refundhash>\n  <sha1hash>b59293aa340136d298d2534a7b6dfc1abb0036a5</sha1hash>\n</request>\n"
+    @rebate.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"rebate\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <account>internet</account>\n  <orderid>12345</orderid>\n  <authcode>123123123</authcode>\n  <pasref>23455</pasref>\n  <amount currency=\"EUR\">500</amount>\n  <autosettle flag=\"1\"/>\n  <refundhash>da39a3ee5e6b4b0d3255bfef95601890afd80709</refundhash>\n  <sha1hash>be2f8fdc84c32d8d77ab6fae7896c10530d9d80c</sha1hash>\n</request>\n"
   end
 end
