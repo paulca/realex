@@ -51,7 +51,7 @@ module RealEx
     attributes :shipping_address, :billing_address, :customer_number, :product_id, :customer_ip_address
     attributes :offline, :manual
     
-    REQUEST_TYPES = ['auth', 'manual', 'offline', 'realscore']
+    REQUEST_TYPES = ['auth', 'manual', 'offline', 'tss']
     
     def initialize(hash = {})
       super(hash)
