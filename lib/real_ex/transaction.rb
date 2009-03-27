@@ -3,21 +3,28 @@ module RealEx
     include Initializer
     attributes :card, :amount, :order_id, :currency, :autosettle, :shipping_address, :billing_address, :customer_number, :variable_reference, :product_id, :customer_ip_address
     attr_accessor :comments
+    attr_accessor :manual, :authcode
     
     def initialize(hash)
       super(hash)
       self.comments ||= []
       self.autosettle ||= false
+      self.manual ||= false
     end
     
     def autosettle?
       autosettle
     end
     
+    def manual?
+      manual
+    end
+    
     def to_xml
-      xml = RealEx::Client.build_xml('auth') do |r|
+      xml = RealEx::Client.build_xml(manual? ? 'manual' : 'auth') do |r|
         r.merchantid RealEx::Config.merchant_id
         r.orderid order_id
+        r.authcode authcode if authcode
         r.account RealEx::Config.account
         r.amount(amount, :currency => currency)
         r.card do |c|
