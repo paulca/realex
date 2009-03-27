@@ -20,3 +20,10 @@ transaction.shipping_address = RealEx::Address.new(:type => 'shipping', :code =>
 transaction.billing_address = RealEx::Address.new(:type => 'billing', :code => 'Postal Code', :country => 'Country')
 
 transaction.authorize!
+
+Manual Request Type
+
+transaction.manual = true
+transaction.authcode = '12345'
+
+transaction.authorize!

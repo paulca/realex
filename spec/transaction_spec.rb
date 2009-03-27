@@ -52,7 +52,7 @@ describe "RealEx::Transaction" do
     
     it "should parse the response" do
       RealEx::Client.should_receive(:call).and_return(Hpricot.XML('yay'))
-      @transaction.authorize
+      @transaction.authorize!
     end
   end
   
@@ -63,7 +63,7 @@ describe "RealEx::Transaction" do
     end
     
     it "should allow a manual request" do
-      @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"manual\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <authcode>123456</authcode>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <card>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <autosettle flag=\"1\"/>\n  <tssinfo>\n  </tssinfo>\n  <sha1hash>d979885b0a296469d85ada0f08c5577d857142a0</sha1hash>\n</request>\n"
+      @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"manual\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <authcode>123456</authcode>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <card>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <autosettle flag=\"1\"/>\n  <tssinfo>\n  </tssinfo>\n  <sha1hash>d979885b0a296469d85ada0f08c5577d857142a0</sha1hash>\n</request>\n" 
     end
   end
   

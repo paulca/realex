@@ -60,7 +60,7 @@ module RealEx
       RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, card.number])
     end
 
-    def authorize
+    def authorize!
       RealEx::Response.new_from_xml(RealEx::Client.call('/epage-remote.cgi', to_xml))
     end
 
