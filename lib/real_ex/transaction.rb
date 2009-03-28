@@ -5,6 +5,8 @@ module RealEx
     attr_accessor :comments
     attr_accessor :authcode, :pasref
     
+    REQUEST_TYPES = ['auth', 'manual', 'offline', 'tss', 'payer-new', 'payer-edit', 'card-new', 'eft-update-expiry-date']
+    
     def initialize(hash = {})
       super(hash)
       self.comments ||= []
@@ -54,8 +56,6 @@ module RealEx
   class Authorization < Transaction
     attributes :shipping_address, :billing_address, :customer_number, :product_id, :customer_ip_address
     attributes :offline, :manual
-    
-    REQUEST_TYPES = ['auth', 'manual', 'offline', 'tss']
     
     def initialize(hash = {})
       super(hash)

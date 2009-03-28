@@ -13,9 +13,8 @@ require 'real_ex/address'
 require 'real_ex/card'
 require 'real_ex/transaction'
 require 'real_ex/response'
+require 'real_ex/recurring'
  
 module RealEx
   class UnknownError < StandardError; end
- 
-  SourceName = 'twittergem'
 end
