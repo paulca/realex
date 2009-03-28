@@ -76,11 +76,11 @@ module RealEx
     end
     
     def request_type
-      @type ||= 'auth'
+      @request_type ||= 'auth'
     end
     
     def request_type=(type)
-      @type = type if REQUEST_TYPES.include?(type)
+      @request_type = type if REQUEST_TYPES.include?(type)
     end
     
     def to_xml

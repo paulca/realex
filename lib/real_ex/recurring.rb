@@ -5,7 +5,7 @@ module RealEx
       attributes :type, :reference, :title, :firstname, :lastname, :address, :company
       
       def request_type
-        @type ||= 'payer-new'
+        @request_type ||= 'payer-new'
       end
 
     end
@@ -14,12 +14,16 @@ module RealEx
       attributes :card, :payer
 
       def request_type
-        @type ||= 'card-new'
+        @request_type ||= 'card-new'
       end
     end
     
     class Authorization < RealEx::Transaction
       attributes :payer
+      
+      def request_type
+        'receipt-in'
+      end
     end
     
   end
