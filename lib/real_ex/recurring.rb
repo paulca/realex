@@ -65,6 +65,19 @@ module RealEx
       def request_type
         @request_type ||= 'card-new'
       end
+      
+      def to_xml
+        super do |per|
+          per.card do |c|
+            c.ref card.reference
+            c.payerref payer.reference
+            c.number card.number
+            c.expdate card.expiry_date
+            c.chname card.cardholder_name
+            c.type card.type
+          end
+        end
+      end
     end
     
     class Authorization < RealEx::Transaction

@@ -4,9 +4,8 @@ module RealEx
     
     attributes :number, :cvv, :expiry_date, :cardholder_name, :type, :issue_number
     
-    # def initialize(attributes = {})
-    #   attributes.each { |k, v| send("#{k}=", v) } unless attributes.nil?
-    # end
+    # for recurring payments
+    attributes :reference
     
     # The luhn check is a check to see if a credit card
     # is actually a credit card or not
