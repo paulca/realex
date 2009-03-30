@@ -12,7 +12,8 @@ describe "RealEx::Recurring" do
               :expiry_date      => '0802',
               :cardholder_name  => 'Paul Campbell',
               :type             => 'VISA',
-              :issue_number     =>  nil
+              :issue_number     =>  nil,
+              :reference => 'billabong'
               )
     @payer = RealEx::Recurring::Payer.new(:type => 'Business', :reference => 'boom', :title => 'Mr.', :firstname => 'Paul', :lastname => 'Campbell', :company => 'Contrast')
     @payer.address = RealEx::Address.new(:street => 'My house', :city => 'Dublin', :county => 'Dublin', :post_code => 'Dublin 2', :country => 'Ireland', :country_code => 'IE',
@@ -38,10 +39,15 @@ describe "RealEx::Recurring" do
   end
   
   it "should create lovely XML for the card" do
-    @card.to_xml.should == 'card XML'
+    @card.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"card-new\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid></orderid>\n  <account>internet</account>\n  <card>\n    <ref>billabong</ref>\n    <payerref>boom</payerref>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <sha1hash>24dc62271ccaddc59082b4db45c80b0241f630f7</sha1hash>\n</request>\n"
+  end
+  
+  it "should create lovely XML for the card update" do
+    @card.update = true
+    @card.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"eft-update-expiry-date\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid></orderid>\n  <account>internet</account>\n  <card>\n    <ref>billabong</ref>\n    <payerref>boom</payerref>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <sha1hash>a97a52b7e5afa2980f4298251c2b8b836fd82331</sha1hash>\n</request>\n"
   end
   
   it "should create tasty XML for the authorization" do
-    @transaction.to_xml.should == 'bone'
+    @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"receipt-in\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod:reference/>\n  <tssinfo>\n  </tssinfo>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
   end
 end

@@ -60,10 +60,10 @@ module RealEx
     end
     
     class Card < RealEx::Transaction
-      attributes :card, :payer
+      attributes :card, :payer, :update
 
       def request_type
-        @request_type ||= 'card-new'
+        @request_type = update == true ? 'eft-update-expiry-date' : 'card-new'
       end
       
       def to_xml
@@ -78,14 +78,66 @@ module RealEx
           end
         end
       end
+      
+      # 20030516181127.yourmerchantid.uniqueid…smithj01.John Smith.498843******9991
+      def hash
+        if update == true
+          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, card.reference,card.expiry_date])
+        else
+          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', payer.reference,card.cardholder_name,card.number])
+        end
+      end
+      
+      def save!
+        authorize!
+      end
+      
+      def update!
+        self.update = true
+        authorize!
+      end
+
     end
     
     class Authorization < RealEx::Transaction
-      attributes :payer
+      attributes :payer, :reference, :customer_number, :variable_reference, :product_id
+      attributes :billing_address, :shipping_address
       
       def request_type
         'receipt-in'
       end
+      
+      def to_xml
+        super do |per|
+          per.amount(amount, :currency => currency)
+          per.payerref payer.reference
+          per.paymentmethod :reference
+          per.tssinfo do |t|
+            t.custnum customer_number if customer_number
+            t.varref variable_reference if variable_reference
+            t.prodid product_id if product_id
+            if billing_address
+              t.address :type => 'billing' do |a|
+                a.code billing_address.post_code
+                a.country billing_address.country
+              end
+            end
+            if shipping_address
+              t.address :type => 'shipping' do |a|
+                a.code shipping_address.post_code
+                a.country shipping_address.country
+              end
+            end
+          end
+
+        end
+      end
+      
+      # timesttimestamp.merchantid.orderid.amount.currency.payerref
+      def hash
+        RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, payer.reference])
+      end
+      
     end
     
   end
