@@ -3,9 +3,10 @@ module RealEx
     
     class Payer < RealEx::Transaction
       attributes :type, :reference, :title, :firstname, :lastname, :address, :company, :comments
+      attributes :update
       
       def request_type
-        @request_type ||= 'payer-new'
+        @request_type = update == true ? 'payer-edit' : 'payer-new'
       end
       
       def to_xml
@@ -45,6 +46,15 @@ module RealEx
       # 20030516175919.yourmerchantid.uniqueid…smithj01
       def hash
         RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', reference])
+      end
+      
+      def save!
+        authorize!
+      end
+      
+      def update!
+        self.update = true
+        authorize!
       end
 
     end
