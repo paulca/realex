@@ -1,7 +1,13 @@
 module RealEx
   module Recurring
     
-    class Payer < RealEx::Transaction
+    class Transaction < RealEx::Transaction
+      def authorize!
+        RealEx::Response.new_from_xml(RealEx::Client.call('/epage-remote-plugins.cgi', to_xml))
+      end
+    end
+    
+    class Payer < Transaction
       attributes :type, :reference, :title, :firstname, :lastname, :address, :company, :comments
       attributes :update
       
@@ -59,8 +65,8 @@ module RealEx
 
     end
     
-    class Card < RealEx::Transaction
-      attributes :card, :payer, :update
+    class Card < Transaction
+      attributes :card, :payer, :update, :reference
 
       def request_type
         @request_type = update == true ? 'eft-update-expiry-date' : 'card-new'
@@ -69,7 +75,7 @@ module RealEx
       def to_xml
         super do |per|
           per.card do |c|
-            c.ref card.reference
+            c.ref reference
             c.payerref payer.reference
             c.number card.number
             c.expdate card.expiry_date
@@ -99,7 +105,7 @@ module RealEx
 
     end
     
-    class Authorization < RealEx::Transaction
+    class Authorization < Transaction
       attributes :payer, :reference, :customer_number, :variable_reference, :product_id
       attributes :billing_address, :shipping_address
       
@@ -111,25 +117,26 @@ module RealEx
         super do |per|
           per.amount(amount, :currency => currency)
           per.payerref payer.reference
-          per.paymentmethod :reference
-          per.tssinfo do |t|
-            t.custnum customer_number if customer_number
-            t.varref variable_reference if variable_reference
-            t.prodid product_id if product_id
-            if billing_address
-              t.address :type => 'billing' do |a|
-                a.code billing_address.post_code
-                a.country billing_address.country
+          per.paymentmethod reference
+          if customer_number or variable_reference or billing_address or shipping_address
+            per.tssinfo do |t|
+              t.custnum customer_number if customer_number
+              t.varref variable_reference if variable_reference
+              t.prodid product_id if product_id
+              if billing_address
+                t.address :type => 'billing' do |a|
+                  a.code billing_address.post_code
+                  a.country billing_address.country
+                end
               end
-            end
-            if shipping_address
-              t.address :type => 'shipping' do |a|
-                a.code shipping_address.post_code
-                a.country shipping_address.country
+              if shipping_address
+                t.address :type => 'shipping' do |a|
+                  a.code shipping_address.post_code
+                  a.country shipping_address.country
+                end
               end
             end
           end
-
         end
       end
       
