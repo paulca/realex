@@ -51,6 +51,6 @@ This is a Ruby library for interfacing with the RealEx API ( http://www.realexpa
 
     recurring_card.save
 
-    transaction = RealEx::Recurring::Authorization.new(:amount => 500, :payer => payer, :order_id => order_id)
+    transaction = RealEx::Recurring::Authorization.new(:amount => 500, :payer => payer, :order_id => order_id, :reference => 'paulcampbell')
 
     transaction.authorize!
