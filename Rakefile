@@ -25,7 +25,7 @@ begin
     gemspec.email = "paul@rslw.com"
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
-    gemspec.version = "0.1.0"
+    gemspec.version = "0.1.1"
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"
