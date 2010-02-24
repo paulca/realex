@@ -12,13 +12,12 @@ describe "RealEx::Recurring" do
               :expiry_date      => '0802',
               :cardholder_name  => 'Paul Campbell',
               :type             => 'VISA',
-              :issue_number     =>  nil,
-              :reference => 'billabong'
+              :issue_number     =>  nil
               )
     @payer = RealEx::Recurring::Payer.new(:type => 'Business', :reference => 'boom', :title => 'Mr.', :firstname => 'Paul', :lastname => 'Campbell', :company => 'Contrast')
     @payer.address = RealEx::Address.new(:street => 'My house', :city => 'Dublin', :county => 'Dublin', :post_code => 'Dublin 2', :country => 'Ireland', :country_code => 'IE',
 :phone_numbers => { :home => '1', :work => '2', :fax => '3', :mobile => '4'}, :email => 'paul@contrast.ie')
-    @card = RealEx::Recurring::Card.new(:payer => @payer, :card => @card)
+    @card = RealEx::Recurring::Card.new(:payer => @payer, :card => @card, :reference => 'billabong')
     @transaction = RealEx::Recurring::Authorization.new(
                     :payer         => @payer,
                     :amount       => 500,
@@ -48,6 +47,6 @@ describe "RealEx::Recurring" do
   end
   
   it "should create tasty XML for the authorization" do
-    @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"receipt-in\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod:reference/>\n  <tssinfo>\n  </tssinfo>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
+    @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"receipt-in\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod></paymentmethod>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
   end
 end

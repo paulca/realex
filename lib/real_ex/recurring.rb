@@ -88,7 +88,7 @@ module RealEx
       # 20030516181127.yourmerchantid.uniqueid…smithj01.John Smith.498843******9991
       def hash
         if update == true
-          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, card.reference,card.expiry_date])
+          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, reference,card.expiry_date])
         else
           RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', payer.reference,card.cardholder_name,card.number])
         end
