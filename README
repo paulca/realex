@@ -59,13 +59,11 @@ transaction.authorize!
 
 Recurring payments
 
-payer = RealEx::Recurring::Payer.new(:type => 'Business', :reference => 'boom', :title => 'Mr.', :firstname => 'Paul', :lastname => 'Campbell', :company => 'Contrast')
+payer = RealEx::Recurring::Payer.new(:type => 'Business', :reference => 'boom', :title => 'Mr.', :firstname => 'Paul', :lastname => 'Campbell', :company => 'Hyper Tiny')
 
-payer.address = RealEx::Address.new(:street => 'My house', :city => 'Dublin', :county => 'Dublin', :post_code => 'Dublin 2', :country => 'Ireland', :country_code => 'IE',
-:phone_numbers => { :home => '1234', :work => '1234', :fax => '1234', :mobile => '1234'}, :email => 'paul@contrast.ie')
-)
+payer.address = RealEx::Address.new(:street => '64 Dame Street', :city => 'Dublin', :county => 'Dublin', :post_code => 'Dublin 3', :country => 'Ireland', :country_code => 'IE', :phone_numbers => { :home => '1234', :work => '1234', :fax => '1234', :mobile => '1234'}, :email => 'paul@rslw.com')
 
-payer.save
+payer.save!
 
 card = RealEx::Recurring::Card.new(:payer => payer)
 

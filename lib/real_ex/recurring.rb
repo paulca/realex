@@ -17,12 +17,12 @@ module RealEx
             payer.lastname lastname
             payer.company company
             payer.address do |add|
-                add.line1 = address.line1
-                add.line1 = address.line2
-                add.line3 = address.line3
-                add.city = address.city
-                add.county = address.county
-                add.postcode = address.post_code
+                add.line1 address.line1
+                add.line1 address.line2
+                add.line3 address.line3
+                add.city address.city
+                add.county address.county
+                add.postcode address.post_code
               add.country(address.country, :country_code => address.country_code)
             end
             payer.phonenumbers do |numbers|

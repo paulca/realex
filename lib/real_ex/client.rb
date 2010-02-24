@@ -21,6 +21,7 @@ module RealEx
       def call(url,xml)
         h = Net::HTTP.new('epage.payandshop.com', 443)
         h.use_ssl = true
+        puts xml
         response = h.request_post(url, xml)
         result = Hpricot.XML(response.body)
         result
