@@ -4,7 +4,7 @@ This is a Ruby library for interfacing with the RealEx API ( http://www.realexpa
 
 ## Basic Usage ##
 
-    require 'real_ex'
+    require 'realex'
 
     RealEx::Config.shared_secret = 'YOUR SHARED SECRET'
     RealEx::Config.merchant_id = 'YOUR MERCHANT ID'
