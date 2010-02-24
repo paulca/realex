@@ -2,6 +2,10 @@
 
 This is a Ruby library for interfacing with the RealEx API ( http://www.realexpayments.com )
 
+## Installation ##
+
+    gem install realex
+
 ## Basic Usage ##
 
     require 'realex'
