@@ -26,6 +26,8 @@ begin
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
     gemspec.version = "0.1.2"
+    gemspec.add_dependency 'hpricot'
+    gemspec.add_dependency 'rio'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"
