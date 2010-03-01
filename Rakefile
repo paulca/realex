@@ -25,7 +25,7 @@ begin
     gemspec.email = "paul@rslw.com"
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
-    gemspec.version = "0.2.0"
+    gemspec.version = "0.2.1"
     gemspec.add_dependency 'hpricot'
     gemspec.add_dependency 'rio'
   end
