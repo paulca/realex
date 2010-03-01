@@ -50,3 +50,26 @@ describe "RealEx::Recurring" do
     @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"receipt-in\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod></paymentmethod>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
   end
 end
+
+describe "RealEx::Recurring without a full address" do
+  before do
+    RealEx::Config.merchant_id = 'paul'
+    RealEx::Config.shared_secret = "He's not dead, he's just asleep!"
+    RealEx::Config.account = 'internet'
+
+    @card = RealEx::Card.new(
+              :number           => '4111111111111111',
+              :cvv              => '509',
+              :expiry_date      => '0802',
+              :cardholder_name  => 'Paul Campbell',
+              :type             => 'VISA',
+              :issue_number     =>  nil
+              )
+    @payer = RealEx::Recurring::Payer.new(:type => 'Business', :reference => 'boom', :title => 'Mr.', :firstname => 'Paul', :lastname => 'Campbell', :company => 'Contrast')
+    @payer.address = RealEx::Address.new(:country => 'Ireland', :country_code => 'IE')
+  end
+  
+  it "should convert the payer" do
+    @payer.to_xml.should match(/IE/)
+  end
+end

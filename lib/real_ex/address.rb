@@ -7,7 +7,12 @@ module RealEx
     [1,2,3].each do |line|
       class_eval do
         define_method("line#{line}") do
-          street.split("\n")[line - 1]
+          parts = street.to_s.split("\n")
+          if parts.empty?
+            return ''
+          else
+            return parts[line - 1]
+          end
         end
       end
     end

@@ -9,7 +9,7 @@ end
 dir = File.dirname(__FILE__)
  
 $:.unshift(File.join(dir, '/../lib/'))
-require dir + '/../lib/real_ex'
+require dir + '/../lib/realex'
  
     
 def stdout_for(&block)

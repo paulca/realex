@@ -29,13 +29,15 @@ module RealEx
                 add.city address.city
                 add.county address.county
                 add.postcode address.post_code
-              add.country(address.country, :country_code => address.country_code)
+                add.country(address.country, :country_code => address.country_code)
             end
-            payer.phonenumbers do |numbers|
-              numbers.home address.phone_numbers[:home]
-              numbers.work address.phone_numbers[:work]
-              numbers.fax address.phone_numbers[:fax]
-              numbers.mobile address.phone_numbers[:mobile]
+            if address.phone_numbers.kind_of?(Hash)
+              payer.phonenumbers do |numbers|
+                numbers.home address.phone_numbers[:home]
+                numbers.work address.phone_numbers[:work]
+                numbers.fax address.phone_numbers[:fax]
+                numbers.mobile address.phone_numbers[:mobile]
+              end
             end
             payer.email address.email
             if !comments.empty?
