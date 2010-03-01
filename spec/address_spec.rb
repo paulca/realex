@@ -9,6 +9,13 @@ describe "RealEx::Address" do
               )
   end
   
+  it "should cope with an empty street" do
+    @address.street = nil
+    lambda {
+      @address.line1
+    }.should_not raise_error
+  end
+  
   it "should just save the attributes" do
     @address.post_code.should == '1234'
   end

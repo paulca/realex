@@ -4,15 +4,15 @@ module RealEx
     attributes :street, :city, :county
     attributes :post_code, :country, :country_code, :phone_numbers, :email
     
+    def initialize(*args)
+      super
+      @phone_numbers ||= {}
+    end
+    
     [1,2,3].each do |line|
       class_eval do
         define_method("line#{line}") do
-          parts = street.to_s.split("\n")
-          if parts.empty?
-            return ''
-          else
-            return parts[line - 1]
-          end
+          street.to_s.split("\n")[line - 1]
         end
       end
     end
