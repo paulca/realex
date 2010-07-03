@@ -1,6 +1,5 @@
-require 'rio'
 require 'digest/sha1'
-require 'hpricot'
+require 'nokogiri'
 require 'net/https'
 require 'builder'
  

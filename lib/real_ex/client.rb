@@ -22,7 +22,7 @@ module RealEx
         h = Net::HTTP.new('epage.payandshop.com', 443)
         h.use_ssl = true
         response = h.request_post(url, xml)
-        result = Hpricot.XML(response.body)
+        result = Nokogiri.XML(response.body)
         result
       end
   

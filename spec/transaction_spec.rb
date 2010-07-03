@@ -51,7 +51,7 @@ describe "RealEx::Transaction" do
   describe "actually going through" do
     
     it "should parse the response" do
-      RealEx::Client.should_receive(:call).and_return(Hpricot.XML('yay'))
+      RealEx::Client.should_receive(:call).and_return(Nokogiri.XML('yay'))
       @transaction.authorize!
     end
   end
