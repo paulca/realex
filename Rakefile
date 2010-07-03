@@ -25,7 +25,7 @@ begin
     gemspec.email = "paul@rslw.com"
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
-    gemspec.version = "0.2.3"
+    gemspec.version = "0.3.0"
     gemspec.add_dependency 'nokogiri', '1.4.1'
   end
 rescue LoadError
