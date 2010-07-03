@@ -25,8 +25,8 @@ begin
     gemspec.email = "paul@rslw.com"
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
-    gemspec.version = "0.2.2"
-    gemspec.add_dependency 'hpricot'
+    gemspec.version = "0.2.3"
+    gemspec.add_dependency 'hpricot', '0.6.164'
     gemspec.add_dependency 'rio'
   end
 rescue LoadError
