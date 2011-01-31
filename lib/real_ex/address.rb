@@ -1,7 +1,7 @@
 module RealEx
   class Address
     include Initializer
-    attributes :street, :city, :county
+    attributes :street, :city, :county, :type
     attributes :post_code, :country, :country_code, :phone_numbers, :email
     
     def initialize(*args)
