@@ -7,7 +7,9 @@ module RealEx
     
     include Initializer
     
-    attributes :timestamp, :result, :message, :orderid, :merchantid, :account, :cvnresult, :avspostcoderesponse, :pasref, :timetaken, :authtimetaken, :batchid, :avsaddressresponse, :cardissuer
+    attributes :timestamp, :result, :message, :orderid, :merchantid, :account,
+               :cvnresult, :avspostcoderesponse, :pasref, :timetaken,
+               :authtimetaken, :batchid, :avsaddressresponse, :cardissuer
     
     def self.new_from_xml(xml)
       parsed_xml = xml.kind_of?(String) ? Nokogiri.XML(xml) : xml

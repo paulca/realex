@@ -25,8 +25,8 @@ begin
     gemspec.email = "paul@rslw.com"
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
-    gemspec.version = "0.3.2"
-    gemspec.add_dependency 'nokogiri', '1.4.1'
+    gemspec.version = "0.3.3"
+    gemspec.add_dependency 'nokogiri', '~> 1.4'
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"
