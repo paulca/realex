@@ -45,7 +45,12 @@ describe "RealEx::Recurring" do
     @card.update = true
     @card.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"card-update-card\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid></orderid>\n  <account>internet</account>\n  <card>\n    <ref>billabong</ref>\n    <payerref>boom</payerref>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <sha1hash>cdcb4dd95d0d61d7c86685b1e465796ea55bdcea</sha1hash>\n</request>\n"
   end
-  
+
+  it "should create lovely XML for the card cancel" do
+    @card.cancel = true
+    @card.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"card-cancel-card\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid></orderid>\n  <account>internet</account>\n  <card>\n    <ref>billabong</ref>\n    <payerref>boom</payerref>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <sha1hash>d21f7cb5de344456c235d93b5f7c311bb70069ea</sha1hash>\n</request>\n"
+  end
+
   it "should create tasty XML for the authorization" do
     @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"receipt-in\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod></paymentmethod>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
   end
