@@ -3,7 +3,7 @@ module RealEx
     
     class Transaction < RealEx::Transaction
       def authorize!
-        RealEx::Response.new_from_xml(real_vault_uri, to_xml))
+        RealEx::Response.new_from_xml(RealEx::Client.call(real_vault_uri, to_xml))
       end
     end
     
