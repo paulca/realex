@@ -1,13 +1,13 @@
 require 'rake'
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 
 desc 'Default: run specs.'
 task :default => :spec
 
 desc 'Run the specs'
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.spec_opts = ['--colour --format progress --loadby mtime --reverse']
-  t.spec_files = FileList['spec/**/*_spec.rb']
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.rspec_opts = ['--colour --format progress']
+  spec.pattern = 'spec/**/*_spec.rb'
 end
 
 PKG_FILES = FileList[
@@ -25,7 +25,7 @@ begin
     gemspec.email = "paul@rslw.com"
     gemspec.homepage = "http://github.com/paulca/realex"
     gemspec.authors = ["Paul Campbell"]
-    gemspec.version = "0.3.3"
+    gemspec.version = "0.3.5"
     gemspec.add_dependency 'nokogiri', '~> 1.4'
   end
 rescue LoadError
