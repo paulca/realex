@@ -68,10 +68,16 @@ module RealEx
     end
     
     class Card < Transaction
-      attributes :card, :payer, :update, :reference
+      attributes :card, :payer, :update, :reference, :cancel
 
       def request_type
-        @request_type = update == true ? 'card-update-card' : 'card-new'
+        if cancel
+          @request_type = 'card-cancel-card'
+        elsif update
+          @request_type = 'card-update-card'
+        else
+          @request_type = 'card-new'
+        end
       end
       
       def to_xml
@@ -89,7 +95,9 @@ module RealEx
       
       # 20030516181127.yourmerchantid.uniqueid…smithj01.John Smith.498843******9991
       def hash
-        if update == true
+        if cancel
+          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, reference])
+        elsif update
           RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, reference, card.expiry_date, card.number])
         else
           RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', payer.reference,card.cardholder_name,card.number])
@@ -102,6 +110,11 @@ module RealEx
       
       def update!
         self.update = true
+        authorize!
+      end
+
+      def destroy!
+        self.cancel = true
         authorize!
       end
 

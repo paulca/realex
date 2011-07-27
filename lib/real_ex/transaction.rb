@@ -5,7 +5,7 @@ module RealEx
     attr_accessor :comments
     attr_accessor :authcode, :pasref
     
-    REQUEST_TYPES = ['auth', 'manual', 'offline', 'tss', 'payer-new', 'payer-edit', 'card-new', 'card-update-card']
+    REQUEST_TYPES = ['auth', 'manual', 'offline', 'tss', 'payer-new', 'payer-edit', 'card-new', 'card-update-card', 'card-cancel-card']
     
     def initialize(hash = {})
       super(hash)
