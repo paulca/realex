@@ -14,7 +14,7 @@ module RealEx
       def build_xml(type, &block)
         xml = Builder::XmlMarkup.new(:indent => 2)
         xml.instruct!
-        xml.request(:timestamp => timestamp, :type => type) { |r| block.call(r) }
+        xml.request(:type => type, :timestamp => timestamp) { |r| block.call(r) }
         xml.target!
       end
     
