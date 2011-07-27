@@ -1,7 +1,7 @@
 module RealEx
   class Transaction
     include Initializer
-    attributes :card, :amount, :order_id, :currency, :autosettle, :variable_reference
+    attributes :card, :amount, :order_id, :currency, :autosettle, :variable_reference, :remote_uri, :real_vault_uri
     attr_accessor :comments
     attr_accessor :authcode, :pasref
     
@@ -12,6 +12,8 @@ module RealEx
       self.comments ||= []
       self.autosettle ||= true
       self.currency ||= RealEx::Config.currency || 'EUR'
+      self.remote_uri ||= RealEx::Config.remote_uri || '/epage-remote.cgi'
+      self.real_vault_uri ||= RealEx::Config.real_vault_uri || '/epage-remote-plugins.cgi'
     end
     
     def request_type
@@ -48,7 +50,7 @@ module RealEx
     end
 
     def authorize!
-      RealEx::Response.new_from_xml(RealEx::Client.call('/epage-remote.cgi', to_xml))
+      RealEx::Response.new_from_xml(RealEx::Client.call(remote_uri, to_xml))
     end
 
   end
