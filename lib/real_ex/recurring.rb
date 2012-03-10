@@ -85,10 +85,13 @@ module RealEx
           per.card do |c|
             c.ref reference
             c.payerref payer.reference
-            c.number card.number
-            c.expdate card.expiry_date
-            c.chname card.cardholder_name
-            c.type card.type
+
+            unless self.cancel
+              c.number card.number
+              c.expdate card.expiry_date
+              c.chname card.cardholder_name
+              c.type card.type
+            end
           end
         end
       end
