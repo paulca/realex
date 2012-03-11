@@ -86,7 +86,7 @@ module RealEx
             c.ref reference
             c.payerref payer.reference
 
-            unless self.cancel
+            if !self.cancel
               c.number card.number
               c.expdate card.expiry_date
               c.chname card.cardholder_name
