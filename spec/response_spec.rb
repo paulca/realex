@@ -62,6 +62,7 @@ describe "RealEx::Response" do
     @response.message.should == '[ test system ] Authorised 171616'
     @response.pasref.should == '12380877763476'
     @response.timetaken.should == '1'
+    @response.authcode.should== "171616"
     @response.authtimetaken.should == '0'
     @response.cardissuer.country.should == 'IRELAND'
     @response.cardissuer.countrycode.should == 'IE'
