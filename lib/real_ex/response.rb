@@ -9,7 +9,8 @@ module RealEx
     
     attributes :timestamp, :result, :message, :orderid, :merchantid, :account,
                :cvnresult, :avspostcoderesponse, :pasref, :timetaken,
-               :authtimetaken, :batchid, :avsaddressresponse, :cardissuer
+               :authtimetaken, :batchid, :avsaddressresponse, :cardissuer,
+               :authcode
     
     def self.new_from_xml(xml)
       parsed_xml = xml.kind_of?(String) ? Nokogiri.XML(xml) : xml
@@ -26,6 +27,7 @@ module RealEx
       r.batchid = (parsed_xml).at('batchid').inner_html if (parsed_xml).at('batchid')
       r.pasref = (parsed_xml).at('pasref').inner_html if (parsed_xml).at('pasref')
       r.timetaken = (parsed_xml).at('timetaken').inner_html if (parsed_xml).at('timetaken')
+      r.authcode = (parsed_xml).at('authcode').inner_html if (parsed_xml).at('authcode')
       r.authtimetaken = (parsed_xml).at('authtimetaken').inner_html if (parsed_xml).at('authtimetaken')
       if cardissuer = (parsed_xml).at('cardissuer')
         r.cardissuer = CardIssuer.new()
