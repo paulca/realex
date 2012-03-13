@@ -20,7 +20,7 @@ module RealEx
           per.payer(:type => type, :ref => reference) do |payer|
             payer.title title
             payer.firstname firstname
-            payer.lastname lastname
+            payer.surname lastname
             payer.company company
             payer.address do |add|
                 add.line1 address.line1
