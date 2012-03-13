@@ -161,9 +161,32 @@ module RealEx
       # timesttimestamp.merchantid.orderid.amount.currency.payerref
       def hash
         RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, payer.reference])
-      end
-      
+      end  
     end
     
+    class Refund < Transaction
+      attributes :payer, :reference
+
+      def request_type
+        'payment-out'
+      end
+
+      def to_xml
+        super do |per|
+          per.amount(amount, :currency => currency)
+          per.payerref payer.reference
+          per.paymentmethod reference
+          per.refundhash refund_hash
+        end
+      end
+
+      def hash
+        RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, payer.reference])
+      end
+      
+      def refund_hash
+        Digest::SHA1.hexdigest(RealEx::Config.refund_password)
+      end
+    end
   end
 end

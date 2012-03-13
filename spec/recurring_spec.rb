@@ -5,6 +5,7 @@ describe "RealEx::Recurring" do
     RealEx::Config.merchant_id = 'paul'
     RealEx::Config.shared_secret = "He's not dead, he's just asleep!"
     RealEx::Config.account = 'internet'
+    RealEx::Config.refund_password = 'password'
 
     @card = RealEx::Card.new(
               :number           => '4111111111111111',
@@ -25,6 +26,13 @@ describe "RealEx::Recurring" do
                     :currency     => 'EUR',
                     :autosettle   => true
                     )
+    @refund = RealEx::Recurring::Refund.new(
+                :payer        => @payer,
+                :amount       => 500,
+                :order_id     => 1234,
+                :currency     => 'EUR',
+                :autosettle   => true
+                )
     RealEx::Client.stub!(:timestamp).and_return('20090326160218')
   end
   
@@ -53,6 +61,10 @@ describe "RealEx::Recurring" do
 
   it "should create tasty XML for the authorization" do
     @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"receipt-in\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod></paymentmethod>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
+  end
+  
+  it "should create tasty XML for the refund" do
+    @refund.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"payment-out\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <payerref>boom</payerref>\n  <paymentmethod></paymentmethod>\n  <refundhash>5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8</refundhash>\n  <sha1hash>ec3afd1714b4473210c2b1eda0c6675bd13c411b</sha1hash>\n</request>\n"
   end
 end
 
