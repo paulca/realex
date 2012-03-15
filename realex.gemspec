@@ -4,19 +4,20 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{realex}
-  s.version = "0.3.5"
+  s.name = "realex"
+  s.version = "0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Paul Campbell}]
-  s.date = %q{2011-07-27}
-  s.description = %q{A Ruby library to make use of the payments API at http://realexpayments.com}
-  s.email = %q{paul@rslw.com}
+  s.authors = ["Paul Campbell"]
+  s.date = "2012-03-15"
+  s.description = "A Ruby library to make use of the payments API at http://realexpayments.com"
+  s.email = "paul@rslw.com"
   s.extra_rdoc_files = [
     "README.md"
   ]
   s.files = [
     "Gemfile",
+    "Gemfile.lock",
     "README.md",
     "Rakefile",
     "lib/real_ex/address.rb",
@@ -39,20 +40,10 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "spec/transaction_spec.rb"
   ]
-  s.homepage = %q{http://github.com/paulca/realex}
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.5}
-  s.summary = %q{Ruby interface to http://realexpayments.com}
-  s.test_files = [
-    "spec/address_spec.rb",
-    "spec/card_spec.rb",
-    "spec/config_spec.rb",
-    "spec/real_ex_spec.rb",
-    "spec/recurring_spec.rb",
-    "spec/response_spec.rb",
-    "spec/spec_helper.rb",
-    "spec/transaction_spec.rb"
-  ]
+  s.homepage = "http://github.com/paulca/realex"
+  s.require_paths = ["lib"]
+  s.rubygems_version = "1.8.15"
+  s.summary = "Ruby interface to http://realexpayments.com"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
