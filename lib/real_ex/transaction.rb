@@ -37,7 +37,7 @@ module RealEx
         end
         if !comments.empty?
           r.comments do |c|
-            comments.each_with_index do |index,comment|
+            comments.each_with_index do |comment,index|
               c.comment(comment, :id => index)
             end
           end
@@ -158,7 +158,7 @@ module RealEx
         per.refundhash refund_hash
         if !comments.empty?
           per.comments do |c|
-            comments.each_with_index do |index,comment|
+            comments.each_with_index do |comment,index|
               c.comment(comment, :id => index)
             end
           end
