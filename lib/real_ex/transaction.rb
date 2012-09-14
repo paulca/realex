@@ -38,7 +38,7 @@ module RealEx
         if !comments.empty?
           r.comments do |c|
             comments.each_with_index do |comment,index|
-              c.comment(comment, :id => index)
+              c.comment(comment, :id => index + 1)
             end
           end
         end
@@ -159,7 +159,7 @@ module RealEx
         if !comments.empty?
           per.comments do |c|
             comments.each_with_index do |comment,index|
-              c.comment(comment, :id => index)
+              c.comment(comment, :id => index + 1)
             end
           end
         end
