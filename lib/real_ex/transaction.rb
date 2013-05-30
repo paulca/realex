@@ -1,7 +1,7 @@
 module RealEx
   class Transaction
     include Initializer
-    attributes :card, :amount, :order_id, :currency, :autosettle, :variable_reference, :remote_uri, :real_vault_uri
+    attributes :card, :amount, :order_id, :currency, :autosettle, :variable_reference, :remote_uri, :real_vault_uri, :account
     attr_accessor :comments
     attr_accessor :authcode, :pasref
     
@@ -14,6 +14,7 @@ module RealEx
       self.currency ||= RealEx::Config.currency || 'EUR'
       self.remote_uri ||= RealEx::Config.remote_uri || '/epage-remote.cgi'
       self.real_vault_uri ||= RealEx::Config.real_vault_uri || '/epage-remote-plugins.cgi'
+      self.account ||= RealEx::Config.account
     end
     
     def request_type
@@ -30,14 +31,14 @@ module RealEx
         r.orderid order_id
         r.authcode authcode if authcode
         r.pasref pasref if pasref
-        r.account RealEx::Config.account
+        r.account account
         if block_given?
           block.call(r)
         end
         if !comments.empty?
           r.comments do |c|
-            comments.each_with_index do |index,comment|
-              c.comment(comment, :id => index)
+            comments.each_with_index do |comment,index|
+              c.comment(comment, :id => index + 1)
             end
           end
         end
@@ -157,8 +158,8 @@ module RealEx
         per.refundhash refund_hash
         if !comments.empty?
           per.comments do |c|
-            comments.each_with_index do |index,comment|
-              c.comment(comment, :id => index)
+            comments.each_with_index do |comment,index|
+              c.comment(comment, :id => index + 1)
             end
           end
         end
