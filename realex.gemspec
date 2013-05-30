@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "realex"
-  s.version = "0.4"
+  s.version = "0.4.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Paul Campbell"]
-  s.date = "2012-03-15"
+  s.date = "2013-05-30"
   s.description = "A Ruby library to make use of the payments API at http://realexpayments.com"
   s.email = "paul@rslw.com"
   s.extra_rdoc_files = [
@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = "http://github.com/paulca/realex"
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.15"
+  s.rubygems_version = "1.8.23"
   s.summary = "Ruby interface to http://realexpayments.com"
 
   if s.respond_to? :specification_version then
