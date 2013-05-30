@@ -46,7 +46,7 @@ module RealEx
 
             if !comments.empty?
               payer.comments do |c|
-                comments.each_with_index do |i,comment|
+                comments.each_with_index do |comment,i|
                   c.comment(comment, :id => i + 1)
                 end
               end

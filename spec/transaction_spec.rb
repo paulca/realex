@@ -33,6 +33,18 @@ describe "RealEx::Transaction" do
     @transaction.comments.should == ["This is a comment"]
   end
   
+  it "should allow overriding of the account" do
+    @transaction = RealEx::Authorization.new(
+                    :card         => @card,
+                    :amount       => 500,
+                    :order_id     => 1234,
+                    :currency     => 'EUR',
+                    :autosettle   => true,
+                    :account      => "override"
+                    )
+    @transaction.account.should == "override"
+  end
+  
   it "should build the xml" do
     @transaction.to_xml.should == "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<request type=\"auth\" timestamp=\"20090326160218\">\n  <merchantid>paul</merchantid>\n  <orderid>1234</orderid>\n  <account>internet</account>\n  <amount currency=\"EUR\">500</amount>\n  <card>\n    <number>4111111111111111</number>\n    <expdate>0802</expdate>\n    <chname>Paul Campbell</chname>\n    <type>VISA</type>\n  </card>\n  <autosettle flag=\"1\"/>\n  <tssinfo>\n  </tssinfo>\n  <sha1hash>d979885b0a296469d85ada0f08c5577d857142a0</sha1hash>\n</request>\n"
   end
