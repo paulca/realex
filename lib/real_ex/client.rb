@@ -1,23 +1,23 @@
 module RealEx
   class Client
     class << self
-      
+
       def timestamp
         Time.now.strftime('%Y%m%d%H%M%S')
       end
-      
-      def build_hash(hash_string_items)
+
+      def build_hash(hash_string_items, shared_secret = RealEx::Config.shared_secret)
         first_hash = Digest::SHA1.hexdigest(hash_string_items.join('.'))
-        Digest::SHA1.hexdigest("#{first_hash}.#{RealEx::Config.shared_secret}")
+        Digest::SHA1.hexdigest("#{first_hash}.#{shared_secret}")
       end
-  
+
       def build_xml(type, &block)
         xml = Builder::XmlMarkup.new(:indent => 2)
         xml.instruct!
         xml.request(:type => type, :timestamp => timestamp) { |r| block.call(r) }
         xml.target!
       end
-    
+
       def call(url,xml)
         h = Net::HTTP.new('epage.payandshop.com', 443)
         h.use_ssl = true
@@ -25,7 +25,7 @@ module RealEx
         result = Nokogiri.XML(response.body)
         result
       end
-  
+
       def parse(response)
         status = (response/:result).inner_html
         raise RealExError, "#{(response/:message).inner_html} (#{status})" unless status == "00"

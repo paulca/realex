@@ -1,12 +1,14 @@
 module RealEx
   class Transaction
     include Initializer
-    attributes :card, :amount, :order_id, :currency, :autosettle, :variable_reference, :remote_uri, :real_vault_uri, :account
+    attributes :card, :amount, :order_id, :currency, :autosettle,
+      :variable_reference, :remote_uri, :real_vault_uri, :account,
+      :merchant_id, :shared_secret
     attr_accessor :comments
     attr_accessor :authcode, :pasref
-    
+
     REQUEST_TYPES = ['auth', 'manual', 'offline', 'tss', 'payer-new', 'payer-edit', 'card-new', 'card-update-card', 'card-cancel-card']
-    
+
     def initialize(hash = {})
       super(hash)
       self.comments ||= []
@@ -16,18 +18,18 @@ module RealEx
       self.real_vault_uri ||= RealEx::Config.real_vault_uri || '/epage-remote-plugins.cgi'
       self.account ||= RealEx::Config.account
     end
-    
+
     def request_type
       self.class.name.split('::').last.downcase
     end
-    
+
     def autosettle?
       autosettle
     end
-    
+
     def to_xml(&block)
       xml = RealEx::Client.build_xml(request_type) do |r|
-        r.merchantid RealEx::Config.merchant_id
+        r.merchantid get_merchant_id
         r.orderid order_id
         r.authcode authcode if authcode
         r.pasref pasref if pasref
@@ -45,27 +47,34 @@ module RealEx
         r.sha1hash hash
       end
     end
-    
+
+    def get_merchant_id
+      merchant_id || RealEx::Config.merchant_id
+    end
+
+    def get_shared_secret
+      shared_secret || RealEx::Config.shared_secret
+    end
+
     def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', ''])
+      RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, '', '', ''], get_shared_secret)
     end
 
     def authorize!
       RealEx::Response.new_from_xml(RealEx::Client.call(remote_uri, to_xml))
     end
-
   end
-  
+
   class Authorization < Transaction
     attributes :shipping_address, :billing_address, :customer_number, :product_id, :customer_ip_address
     attributes :offline, :manual
-    
+
     def initialize(hash = {})
       super(hash)
       self.manual ||= false
       self.offline ||= false
     end
-    
+
     REQUEST_TYPES.each do |type|
       class_eval do
         define_method("#{type}=") do |boolean|  # def manual=(boolean)
@@ -77,15 +86,15 @@ module RealEx
         end                                     # end
       end
     end
-    
+
     def request_type
       @request_type ||= 'auth'
     end
-    
+
     def request_type=(type)
       @request_type = type if REQUEST_TYPES.include?(type)
     end
-    
+
     def to_xml
       super do |r|
         r.amount(amount, :currency => currency) unless offline?
@@ -118,39 +127,39 @@ module RealEx
         end
       end
     end
-    
+
     def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, (amount unless offline?), (currency unless offline?), (card.number unless offline?)])
+      RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, (amount unless offline?), (currency unless offline?), (card.number unless offline?)], get_shared_secret)
     end
-    
+
     def rebate!
-      
+
     end
-    
+
     def void!
-      
+
     end
-    
+
     def settle!
-      
+
     end
-    
+
   end
-  
-  class Void < Transaction    
+
+  class Void < Transaction
   end
-  
+
   class Settle < Transaction
   end
-  
+
   class Rebate < Transaction
-    
+
     attr_accessor :refund_password
-    
+
     def refund_hash
       Digest::SHA1.hexdigest((refund_password || RealEx::Config.refund_password || ''))
     end
-    
+
     def to_xml(&block)
       super do |per|
         per.amount(amount, :currency => currency)
@@ -166,9 +175,9 @@ module RealEx
       end
     end
 
-    
+
     def hash
-      RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, ''])
+      RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, amount, currency, ''], get_shared_secret)
     end
   end
 end

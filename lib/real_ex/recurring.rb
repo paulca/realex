@@ -57,7 +57,7 @@ module RealEx
 
       # 20030516175919.yourmerchantid.uniqueid…smithj01
       def hash
-        RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', reference])
+        RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, '', '', reference], get_shared_secret)
       end
 
       def save!
@@ -103,11 +103,11 @@ module RealEx
       # 20030516181127.yourmerchantid.uniqueid…smithj01.John Smith.498843******9991
       def hash
         if cancel
-          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, reference])
+          RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, payer.reference, reference], get_shared_secret)
         elsif update
-          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, payer.reference, reference, card.expiry_date, card.number])
+          RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, payer.reference, reference, card.expiry_date, card.number], get_shared_secret)
         else
-          RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, '', '', payer.reference,card.cardholder_name,card.number])
+          RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, '', '', payer.reference,card.cardholder_name,card.number], get_shared_secret)
         end
       end
 
@@ -164,7 +164,7 @@ module RealEx
 
       # timesttimestamp.merchantid.orderid.amount.currency.payerref
       def hash
-        RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, payer.reference])
+        RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, amount, currency, payer.reference], get_shared_secret)
       end
     end
 
@@ -185,7 +185,7 @@ module RealEx
       end
 
       def hash
-        RealEx::Client.build_hash([RealEx::Client.timestamp, RealEx::Config.merchant_id, order_id, amount, currency, payer.reference])
+        RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, amount, currency, payer.reference])
       end
 
       def refund_hash
