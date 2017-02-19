@@ -48,20 +48,22 @@ module RealEx
       end
     end
 
-    def get_merchant_id
-      merchant_id || RealEx::Config.merchant_id
-    end
-
-    def get_shared_secret
-      shared_secret || RealEx::Config.shared_secret
-    end
-
     def hash
       RealEx::Client.build_hash([RealEx::Client.timestamp, get_merchant_id, order_id, '', '', ''], get_shared_secret)
     end
 
     def authorize!
       RealEx::Response.new_from_xml(RealEx::Client.call(remote_uri, to_xml))
+    end
+
+    protected
+
+    def get_merchant_id
+      merchant_id || RealEx::Config.merchant_id
+    end
+
+    def get_shared_secret
+      shared_secret || RealEx::Config.shared_secret
     end
   end
 
