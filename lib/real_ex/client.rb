@@ -22,14 +22,15 @@ module RealEx
         port = 443
         proxy = RealEx::Config.proxy_uri ? URI(RealEx::Config.proxy_uri) : nil
 
-        h =
-          if proxy
-            Net::HTTP.new(base_uri, port, proxy.host, proxy.port, proxy.user, proxy.password)
-          else
-            Net::HTTP.new(base_uri, port)
-          end
+        h = nil
+        if proxy
+          h = Net::HTTP.new(base_uri, port, proxy.host, proxy.port, proxy.user, proxy.password)
+          h.use_ssl = proxy.scheme === "https"
+        else
+          h = Net::HTTP.new(base_uri, port)
+          h.use_ssl = true
+        end
 
-        h.use_ssl = true
         response = h.request_post(url, xml)
         result = Nokogiri.XML(response.body)
         result
