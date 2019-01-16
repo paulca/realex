@@ -20,16 +20,16 @@ module RealEx
       def call(url,xml)
         proxy = RealEx::Config.proxy_uri ? URI(RealEx::Config.proxy_uri) : nil
 
-        h = nil
-        if proxy
-          h = Net::HTTP.new("https://epage.payandshop.com", nil, proxy.host, proxy.port, proxy.user, proxy.password)
-          h.use_ssl = proxy.scheme === "https"
-        else
-          h = Net::HTTP.new("epage.payandshop.com", 443)
-          h.use_ssl = true
-        end
+        http =
+          if proxy
+            Net::HTTP.new("epage.payandshop.com", 443, proxy.host, proxy.port, proxy.user, proxy.password)
+          else
+            Net::HTTP.new("epage.payandshop.com", 443)
+          end
 
-        response = h.request_post(url, xml)
+        http.use_ssl = true
+
+        response = http.request_post(url, xml)
         result = Nokogiri.XML(response.body)
         result
       end
