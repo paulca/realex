@@ -18,16 +18,14 @@ module RealEx
       end
 
       def call(url,xml)
-        base_uri = "epage.payandshop.com".freeze
-        port = 443
         proxy = RealEx::Config.proxy_uri ? URI(RealEx::Config.proxy_uri) : nil
 
         h = nil
         if proxy
-          h = Net::HTTP.new(base_uri, port, proxy.host, proxy.port, proxy.user, proxy.password)
+          h = Net::HTTP.new("https://epage.payandshop.com", nil, proxy.host, proxy.port, proxy.user, proxy.password)
           h.use_ssl = proxy.scheme === "https"
         else
-          h = Net::HTTP.new(base_uri, port)
+          h = Net::HTTP.new("epage.payandshop.com", 443)
           h.use_ssl = true
         end
 
