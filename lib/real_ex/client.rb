@@ -1,13 +1,12 @@
 module RealEx
   class Client
     class << self
-
       def timestamp
-        Time.now.strftime('%Y%m%d%H%M%S')
+        Time.now.strftime("%Y%m%d%H%M%S")
       end
 
       def build_hash(hash_string_items, shared_secret = RealEx::Config.shared_secret)
-        first_hash = Digest::SHA1.hexdigest(hash_string_items.join('.'))
+        first_hash = Digest::SHA1.hexdigest(hash_string_items.join("."))
         Digest::SHA1.hexdigest("#{first_hash}.#{shared_secret}")
       end
 
@@ -19,7 +18,17 @@ module RealEx
       end
 
       def call(url,xml)
-        h = Net::HTTP.new('epage.payandshop.com', 443)
+        base_uri = "epage.payandshop.com".freeze
+        port = 443
+        proxy = RealEx::Config.proxy_uri ? URI(RealEx::Config.proxy_uri) : nil
+
+        h =
+          if proxy
+            Net::HTTP.new(base_uri, port, proxy.host, proxy.port, proxy.user, proxy.password)
+          else
+            Net::HTTP.new(base_uri, port)
+          end
+
         h.use_ssl = true
         response = h.request_post(url, xml)
         result = Nokogiri.XML(response.body)
